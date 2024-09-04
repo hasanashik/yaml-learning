@@ -1,0 +1,100 @@
+student: !!seq
+ - marks
+ - name
+ - roll_no
+
+# like this also
+cities: [new delhi, mumbai]
+
+# some of the keys of the seq will be empty
+# sparse seq
+sparse seq:
+ - hey
+ - how
+ - 
+ - Null
+ - sup
+
+# nested sequence
+- 
+ - mango
+ - apple
+ - banana
+-
+ - marks
+ - roll num
+ - date
+
+# key: value pairs are called maps
+!!map
+
+# nested mappings: map within an map
+name: zaman
+role:
+  age: 30
+  job: DevOps
+  
+# same as
+name: zaman
+role: { age: 30, job: DevOps}
+
+# pairs: keys may have duplicate values
+# !!pairs
+# Normally, YAML mappings (key-value pairs) do not allow duplicate keys. 
+# However, by using !!pairs, you can explicitly define a sequence of key-value pairs that allows the same key to appear more than once.
+
+pair example: !!pairs
+ - job: DevOps
+ - job: Automation
+
+# The YAML parser will treat this structure as a list of pairs:
+# [
+#   {job: DevOps},
+#   {job: Automation}
+# ]
+
+# same as
+pair example: !!pairs [job: DevOps, job: Automation]
+# this will be an array of hashtables
+
+# !!set will allow you to have unique values
+names: !!set
+ ? zaman
+ ? simon
+ ? Rahul
+
+# dictionary !!omap
+people: !!omap
+  - zaman:
+     name: zaman
+     age: 30
+     height: 678
+  - Rahul:
+     name: Rahul OP
+     age: 25
+     height: 456
+
+# reusing some properties using anchors
+likings: &likes
+  fav fruit: mango
+  dislikes: grapes
+
+person1:
+  name: zaman
+  <<: *likes
+
+person2:
+  name: Rahul
+  <<: *likes
+  dislikes: berries
+
+# this will look like
+person2:
+  name: Rahul
+  fav fruit: mango
+  dislikes: berries
+
+person3:
+  name: Apoorv
+  fav fruit: mango
+  dislikes: grapes

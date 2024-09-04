@@ -1,0 +1,11 @@
+development:
+  database: SQLite
+  user: admin
+  password: secret
+
+production:
+  database: MySQL
+  user: admin
+  password: secret
+  host: db.mysite.com
+  
