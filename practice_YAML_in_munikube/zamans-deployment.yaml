@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zamans-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zamans-container
+  template:
+    metadata:
+      labels:
+        app: zamans-container
+    spec:
+      containers:
+        - name: zamans-container
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          env:
+            - name: MYSELF
+              value: "zaman"
+            - name: FAVORITE_FRUIT
+              value: "apple"
+            - name: JOB
+              value: "DevOps"
+          command:
+            - "sh"
+            - "-c"
+            - "echo ${MYSELF} loves ${FAVORITE_FRUIT} and works as a ${JOB}. && exec nginx -g 'daemon off;'"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zamans-service
+spec:
+  selector:
+    app: zamans-container
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
