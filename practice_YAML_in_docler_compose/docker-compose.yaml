@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "echo ${MYSELF} loves ${FAVORITE_FRUIT} and works as a ${JOB}. && exec nginx -g 'daemon off;'"
+      sh -c "echo ${MYSELF} loves ${FAVORITE_FRUIT} and works as a ${JOB}. "
     labels:
       description: "A container demonstrating YAML syntax"
       creator: zaman
@@ -23,7 +23,7 @@ services:
     image: alpine:latest
     container_name: second-container
     command: >
-      sh -c "echo This is the second container && sleep 3600" # Sleep to keep the container running
+      sh -c "echo This is the second container" # Sleep to keep the container running
 
 networks:
   app_net:
