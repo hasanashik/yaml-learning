@@ -1,0 +1,199 @@
+kubectl apply -f pod.yaml
+To delete:
+kubectl get deployments
+kubectl delete deployments zamans-container
+
+kubectl get services
+kubectl delete services zamans-service
+
+kubectl get svc firewall-service
+ kubectl get configmap
+
+PS > kubectl get pods
+NAME           READY   STATUS    RESTARTS   AGE
+firewall-pod   3/3     Running   0          78s
+
+kubectl delete pod firewall-pod
+
+PS > kubectl get services 
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+firewall-service   NodePort    10.98.167.249   <none>        80:30007/TCP   40s
+kubernetes         ClusterIP   10.96.0.1       <none>        443/TCP        61s
+
+kubectl exec -it firewall-pod   -- /bin/sh
+
+Connect to Container 2 or Container 3, you need to explicitly provide the --container flag.
+kubectl exec -it firewall-pod --container container-2 -- /bin/sh
+kubectl exec -it firewall-pod --container firewall-container -- /bin/sh
+
+
+kubectl describe pod firewall-pod
+
+kubectl get pod firewall-pod -o jsonpath='{.spec.containers[*].ports[*].containerPort}'
+
+kubectl get svc firewall-service
+kubectl get pods
+
+kubectl get svc firewall-service
+NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+firewall-service   NodePort   10.104.131.51   <none>        80:30007/TCP   18h
+
+Find the Minikube Node IP Address:
+minikube ip
+192.168.49.2
+In YAML configuration, the NodePort is set to 30007, meaning Kubernetes will expose the service on that port externally.
+Access the Service using the Minikube Node IP and the NodePort like this:
+http://<Minikube-IP>:<NodePort>
+http://192.168.49.2:30007
+
+To see logs:
+kubectl logs firewall-pod -c firewall-container
+kubectl logs firewall-pod -c container-1
+
+To access service url: minikube service firewall-service
+
+
+kubectl delete pods firewall-pod
+kubectl apply -f .\pod.yaml
+kubectl get pods
+kubectl exec -it firewall-pod --container firewall-container -- /bin/sh
+# curl 127.0.0.1:8082
+<p>Reply from container 2</p>
+# curl 127.0.0.1:8081
+<p>Reply from container 1</p>
+
+C:\Windows\system32>minikube service firewall-service
+W0910 18:28:22.426696    9196 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\Hasan-Ashik-IPTX\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+|-----------|------------------|-------------|---------------------------|
+| NAMESPACE |       NAME       | TARGET PORT |            URL            |
+|-----------|------------------|-------------|---------------------------|
+| default   | firewall-service |        8090 | http://192.168.49.2:30007 |
+|-----------|------------------|-------------|---------------------------|
+* Starting tunnel for service firewall-service.
+|-----------|------------------|-------------|-----------------------|
+| NAMESPACE |       NAME       | TARGET PORT |          URL          |
+|-----------|------------------|-------------|-----------------------|
+| default   | firewall-service |             | http://127.0.0.1:6698 |
+|-----------|------------------|-------------|-----------------------|
+* Opening service default/firewall-service in default browser...
+
+
+kubectl describe pod firewall-pod
+
+Name:             firewall-pod
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Tue, 10 Sep 2024 19:49:47 +0600
+Labels:           app=multi-container-app
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.11
+IPs:
+  IP:  10.244.0.11
+Containers:
+  container-1:
+    Container ID:  docker://9d57fb9b35c83a656332409d1fc5a59d3feb4aa56f34fe2e97283aa13af9f144
+    Image:         nginx:alpine
+    Image ID:      docker-pullable://nginx@sha256:a5127daff3d6f4606be3100a252419bfa84fd6ee5cd74d0feaca1a5068f97dcf
+    Port:          8081/TCP
+    Host Port:     0/TCP
+    Command:
+      sh
+      -c
+      echo '<p>Reply from container 1</p>' > /usr/share/nginx/html/index.html
+      echo 'server { listen 8081; location / { root /usr/share/nginx/html; } }' > /etc/nginx/conf.d/default.conf
+      nginx -g 'daemon off;'
+
+    State:          Running
+      Started:      Tue, 10 Sep 2024 19:49:47 +0600
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-c7gvp (ro)
+  container-2:
+    Container ID:  docker://e159fe8f273b3718a32469a2afc2421cf231cd9234ae22f31b586a7a5210e9e6
+    Image:         nginx:alpine
+    Image ID:      docker-pullable://nginx@sha256:a5127daff3d6f4606be3100a252419bfa84fd6ee5cd74d0feaca1a5068f97dcf
+    Port:          8082/TCP
+    Host Port:     0/TCP
+    Command:
+      sh
+      -c
+      echo '<p>Reply from container 2</p>' > /usr/share/nginx/html/index.html
+      echo 'server { listen 8082; location / { root /usr/share/nginx/html; } }' > /etc/nginx/conf.d/default.conf
+      nginx -g 'daemon off;'
+
+    State:          Running
+      Started:      Tue, 10 Sep 2024 19:49:47 +0600
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-c7gvp (ro)
+  firewall-container:
+    Container ID:  docker://7f2ec53686c691be04686c468ea648116963990e69d86571f8ca8d2ab69a7eb0
+    Image:         nginx
+    Image ID:      docker-pullable://nginx@sha256:04ba374043ccd2fc5c593885c0eacddebabd5ca375f9323666f28dfd5a9710e3
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Command:
+      nginx
+      -g
+      daemon off;
+      -c
+      /etc/nginx/nginx.conf
+    State:          Running
+      Started:      Tue, 10 Sep 2024 19:49:51 +0600
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/nginx/nginx.conf from nginx-config (rw,path="nginx.conf")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-c7gvp (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  nginx-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      nginx-config
+    Optional:  false
+  kube-api-access-c7gvp:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m29s  default-scheduler  Successfully assigned default/firewall-pod to minikube
+  Normal  Pulled     2m29s  kubelet            Container image "nginx:alpine" already present on machine
+  Normal  Created    2m29s  kubelet            Created container container-1
+  Normal  Started    2m29s  kubelet            Started container container-1
+  Normal  Pulled     2m29s  kubelet            Container image "nginx:alpine" already present on machine
+  Normal  Created    2m29s  kubelet            Created container container-2
+  Normal  Started    2m29s  kubelet            Started container container-2
+  Normal  Pulling    2m29s  kubelet            Pulling image "nginx"
+  Normal  Pulled     2m25s  kubelet            Successfully pulled image "nginx" in 4.024s (4.024s including waiting). Image size: 187706879 bytes.
+  Normal  Created    2m25s  kubelet            Created container firewall-container
+  Normal  Started    2m25s  kubelet            Started container firewall-container
+
+
+
+kubectl logs firewall-pod -c firewall-container
+
+Nginx config check: nginx -t 
+reload Nginx:  systemctl reload nginx
+service nginx reload
