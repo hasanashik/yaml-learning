@@ -51,7 +51,9 @@ You can now reach the backend services through the firewall:
 
 Container-1: http://127.0.0.1:8195/app1
 Container-2: http://127.0.0.1:8195/app2
-**Pod Structure Overview**
+
+## Pod Structure Overview
+
 container-1 and container-2 are NGINX containers that serve custom HTML content.
 firewall-container is an NGINX proxy that load balances requests between the two backend containers.
 The ConfigMap provides the NGINX configuration for the firewall-container, handling the routing and error pages.
