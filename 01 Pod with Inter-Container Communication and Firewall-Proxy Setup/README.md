@@ -13,6 +13,8 @@ This project demonstrates how to deploy a Kubernetes Pod with three containers o
 - Implement Layer 7 (L7) load balancing using NGINX in the firewall-container.
 - Route all requests through the firewall-container.
 
+![Markdown](Live demo-1.gif?style=for-the-badge&logo=markdown&logoColor=white)
+
 ## Requirements
 
 - Windows 10 PC
