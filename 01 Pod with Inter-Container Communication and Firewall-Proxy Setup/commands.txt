@@ -197,3 +197,8 @@ kubectl logs firewall-pod -c firewall-container
 Nginx config check: nginx -t 
 reload Nginx:  systemctl reload nginx
 service nginx reload
+
+
+shortcut for fetching the minikube IP and a service’s NodePort:
+minikube service <service-name> --url
+minikube service firewall-service --url
