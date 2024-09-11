@@ -1,5 +1,7 @@
 # Kubernetes Multi-Container Pod with NGINX Firewall
 
+![Markdown](https://github.com/hasanashik/yaml-learning/blob/main/01%20Pod%20with%20Inter-Container%20Communication%20and%20Firewall-Proxy%20Setup/diagram.PNG?style=for-the-badge&logo=markdown&logoColor=white)
+
 This project demonstrates how to deploy a Kubernetes Pod with three containers on Minikube, using NGINX for Layer 7 (L7) load balancing. The pod includes a **firewall-container** that proxies requests to two backend containers: **container-1** and **container-2**. All traffic is routed through the firewall-container, abstracting direct access to the backend services.
 
 ## Objectives
